@@ -1,0 +1,15 @@
+node_modules/
+*.log
+.env
+.env.*
+
+# certificati self-signed (se mai li genererai)
+cert.pem
+key.pem
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp

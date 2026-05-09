@@ -1,0 +1,8 @@
+{
+  "name": "phone-remote",
+  "version": "1.0.0",
+  "description": "Phone as keyboard + trackpad for Linux/Wayland PC",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "ws": "^8.18.0" }
+}
