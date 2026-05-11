@@ -19,7 +19,6 @@ Apri una pagina web sul telefono, sposti il dito, il cursore si muove. Digiti, e
 |---|---|---|
 | ![home](docs/screenshot-home.png) | ![media](docs/screenshot-media.png) | ![settings](docs/screenshot-settings.png) |
 
-> Sono mockup fedeli all'UI (l'ambiente di sviluppo dove ho generato la doc non aveva Chrome headless). Per sostituirli con screenshot reali: scatta dal telefono mentre la PWA è aperta e salva in `docs/screenshot-{home,media,settings}.png`.
 
 ## Architettura
 
@@ -181,7 +180,6 @@ Distro non in lista: lo script lo segnala, tu installi manualmente `ydotool node
 npm start
 ```
 
-Lo script ti dice l'IP. Dal browser del telefono apri `http://<IP-PC>:8080`. Sui browser mobili moderni vedi "Aggiungi alla schermata Home": diventa una PWA con icona dedicata.
 
 ## Note
 
