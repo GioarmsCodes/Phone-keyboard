@@ -288,6 +288,9 @@ let dragging = false;
 let scrollAccum = 0;
 let twoFingerStart = false;
 let twoFingerMoved = false;
+let twoFingerActive = false;     // due dita giù, candidato a right-click
+let pendingTap = null;           // { timer, x, y } click sx in attesa
+const PENDING_TAP_MS = 180;
 
 function flashTap() { pad.classList.add('tap'); setTimeout(() => pad.classList.remove('tap'), 80); }
 
@@ -296,21 +299,18 @@ pad.addEventListener('touchstart', (e) => {
   for (const t of e.changedTouches) {
     touches.set(t.identifier, { x:t.clientX, y:t.clientY, sx:t.clientX, sy:t.clientY, t: Date.now(), moved: false });
   }
-  // Detect double-tap-and-hold start (drag)
-  if (touches.size === 1 && !dragging) {
-    const t = e.changedTouches[0];
-    const dt = Date.now() - lastTapTime;
-    const dist = Math.hypot(t.clientX - lastTapX, t.clientY - lastTapY);
-    if (dt < DTAP_MAX_MS && dist < DTAP_MAX_DIST) {
-      // Begin drag: press left button now, will be held until touchend
-      dragging = true;
-      pad.classList.add('drag');
-      send({ type: 'mousedown', button: 'left' });
-      buzz(15);
-    }
+  // Double-tap-hold → promuovi il tap in attesa a drag (niente click+release prima)
+  if (pendingTap && touches.size === 1 && !dragging) {
+    clearTimeout(pendingTap.timer);
+    pendingTap = null;
+    dragging = true;
+    pad.classList.add('drag');
+    send({ type: 'mousedown', button: 'left' });
+    buzz(15);
   }
   if (touches.size === 2) {
     twoFingerStart = true;
+    twoFingerActive = true;
     twoFingerMoved = false;
     scrollAccum = 0;
   }
@@ -318,7 +318,7 @@ pad.addEventListener('touchstart', (e) => {
 
 pad.addEventListener('touchmove', (e) => {
   e.preventDefault();
-  if (touches.size === 1) {
+  if (touches.size === 1 || dragging) {
     const t = e.changedTouches[0];
     const prev = touches.get(t.identifier);
     if (!prev) return;
@@ -329,7 +329,7 @@ pad.addEventListener('touchmove', (e) => {
     const dx = Math.round(rdx * cfg.sens);
     const dy = Math.round(rdy * cfg.sens);
     if (dx || dy) send({ type: 'move', dx, dy });
-  } else if (touches.size === 2) {
+  } else if (touches.size === 2 && !dragging) {
     const t = e.changedTouches[0];
     const prev = touches.get(t.identifier);
     if (!prev) return;
@@ -338,7 +338,6 @@ pad.addEventListener('touchmove', (e) => {
     if (Math.abs(t.clientX - prev.sx) > TAP_MAX_DIST || Math.abs(t.clientY - prev.sy) > TAP_MAX_DIST) {
       prev.moved = true; twoFingerMoved = true;
     }
-    // Accumulate fractional scroll, emit ticks
     scrollAccum += dy;
     const tickSize = 18 / cfg.scrSpd;
     while (Math.abs(scrollAccum) >= tickSize) {
@@ -357,30 +356,37 @@ pad.addEventListener('touchend', (e) => {
     const data = touches.get(t.identifier);
     if (!data) continue;
     const dt = Date.now() - data.t;
-    const wasTwoFinger = twoFingerStart && remainingAfter === 0;
 
     if (dragging && remainingAfter === 0) {
-      // End drag
       send({ type: 'mouseup', button: 'left' });
       dragging = false;
       pad.classList.remove('drag');
       buzz(8);
-    } else if (wasTwoFinger && !twoFingerMoved && dt < TAP_MAX_MS && touches.size === 2) {
-      // Two-finger tap (only on the SECOND finger lifting)
-      send({ type: 'click', button: 'right' });
-      flashTap(); buzz();
-    } else if (!data.moved && dt < TAP_MAX_MS && remainingAfter === 0 && !wasTwoFinger) {
-      // Single-finger tap → left click + record for double-tap
-      send({ type: 'click', button: 'left' });
-      lastTapTime = Date.now();
-      lastTapX = t.clientX; lastTapY = t.clientY;
-      flashTap(); buzz();
+    } else if (!data.moved && dt < TAP_MAX_MS && remainingAfter === 0 && !twoFingerActive && !dragging) {
+      // Tap singolo: ritarda il click, così un secondo tap entro PENDING_TAP_MS lo promuove a drag
+      const tx = t.clientX, ty = t.clientY;
+      if (pendingTap) clearTimeout(pendingTap.timer);
+      pendingTap = {
+        x: tx, y: ty,
+        timer: setTimeout(() => {
+          send({ type: 'click', button: 'left' });
+          lastTapTime = Date.now();
+          lastTapX = tx; lastTapY = ty;
+          flashTap(); buzz();
+          pendingTap = null;
+        }, PENDING_TAP_MS)
+      };
     }
-
     touches.delete(t.identifier);
   }
 
-  if (touches.size < 2) {
+  // Right-click 2 dita: parte UNA volta quando entrambe le dita sono via
+  if (twoFingerActive && touches.size === 0) {
+    if (!twoFingerMoved && !dragging) {
+      send({ type: 'click', button: 'right' });
+      flashTap(); buzz();
+    }
+    twoFingerActive = false;
     twoFingerStart = false;
     twoFingerMoved = false;
   }
@@ -388,8 +394,11 @@ pad.addEventListener('touchend', (e) => {
 
 pad.addEventListener('touchcancel', () => {
   if (dragging) { send({ type: 'mouseup', button: 'left' }); dragging = false; pad.classList.remove('drag'); }
+  if (pendingTap) { clearTimeout(pendingTap.timer); pendingTap = null; }
   touches.clear();
   twoFingerStart = false;
+  twoFingerActive = false;
+  twoFingerMoved = false;
 }, { passive:false });
 
 // ─── Keyboard input ─────────────────────────────────────────────────

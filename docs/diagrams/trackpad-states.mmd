@@ -1,0 +1,34 @@
+stateDiagram-v2
+  [*] --> Idle
+
+  Idle --> OneFinger: touchstart (1 dito)
+  Idle --> TwoFinger: touchstart (2 dita)
+
+  OneFinger --> Moving: spostamento > 10px
+  OneFinger --> PendingTap: touchend rapido<br/>(no movimento)
+  OneFinger --> Idle: touchcancel
+
+  Moving --> Moving: send move(dx,dy)
+  Moving --> Idle: touchend
+
+  PendingTap --> Drag: nuovo touchstart<br/>entro 180ms
+  PendingTap --> Idle: timeout 180ms<br/>→ send click sx
+
+  Drag --> Drag: send move(dx,dy)
+  Drag --> Idle: touchend<br/>→ send mouseup
+
+  TwoFinger --> Scrolling: spostamento Y
+  TwoFinger --> RightClick: entrambe sollevate<br/>rapidamente (no move)
+  TwoFinger --> Idle: touchcancel
+
+  Scrolling --> Scrolling: send scroll(dir)
+  Scrolling --> Idle: touchend (entrambe via)
+
+  RightClick --> Idle: send click dx
+
+  note right of PendingTap
+    Chiave del fix: ritardo
+    consente al double-tap-hold
+    di promuovere il tap in drag
+    invece di click + mousedown.
+  end note

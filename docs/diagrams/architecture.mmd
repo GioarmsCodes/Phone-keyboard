@@ -1,0 +1,29 @@
+flowchart LR
+  subgraph Phone["📱 Telefono (browser/PWA)"]
+    UI[client.html<br/>UI: trackpad, tasti, drawer]
+    SW[Service Worker<br/>sw.js]
+    UI -. cache offline .-> SW
+  end
+
+  subgraph PC["💻 PC Linux"]
+    direction TB
+    Srv[server.js<br/>HTTP + WS<br/>:8080]
+    YD[ydotoold<br/>systemd --user]
+    UIN["/dev/uinput<br/>(kernel)"]
+    Kern[Input subsystem<br/>evdev → X11/Wayland]
+    Apps[App attive<br/>browser, editor, …]
+
+    Srv -- execFile<br/>ydotool key/click/type --> YD
+    YD -- ioctl --> UIN
+    UIN --> Kern
+    Kern --> Apps
+  end
+
+  Phone <==>|"Wi-Fi LAN<br/>WebSocket JSON"| Srv
+
+  classDef phone fill:#1e293b,stroke:#3b82f6,color:#e2e8f0
+  classDef pc fill:#1f2937,stroke:#10b981,color:#e2e8f0
+  classDef kernel fill:#3f1d1d,stroke:#ef4444,color:#fecaca
+  class UI,SW phone
+  class Srv,YD,Apps pc
+  class UIN,Kern kernel

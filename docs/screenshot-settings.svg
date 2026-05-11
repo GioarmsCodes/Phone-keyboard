@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 915" width="412" height="915" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <clipPath id="phone3">
+      <rect x="0" y="0" width="412" height="915" rx="40" ry="40"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#phone3)">
+    <rect width="412" height="915" fill="#0e0e10"/>
+
+    <!-- Status connesso -->
+    <rect x="0" y="0" width="412" height="32" fill="#1a3a1a"/>
+    <circle cx="14" cy="16" r="4" fill="#9f9"/>
+    <text x="24" y="20" font-size="12" fill="#9f9">Connesso</text>
+
+    <!-- Trackpad in stato DRAG (ambra) -->
+    <rect x="6" y="38" width="400" height="240" rx="14" fill="#3a2f1f" stroke="#a76"/>
+    <text x="206" y="148" text-anchor="middle" font-size="14" fill="#caa" font-weight="500">⤳ Drag attivo</text>
+    <text x="206" y="172" text-anchor="middle" font-size="11" fill="#a98">tieni e muovi per trascinare</text>
+    <circle cx="206" cy="200" r="14" fill="none" stroke="#caa" stroke-width="2" opacity="0.8"/>
+    <circle cx="206" cy="200" r="6" fill="#caa" opacity="0.9"/>
+
+    <!-- Click buttons -->
+    <g transform="translate(6,288)">
+      <rect x="0" y="0" width="130" height="44" rx="8" fill="#2a4a6a" stroke="#4a7a9a"/>
+      <text x="65" y="28" text-anchor="middle" font-size="14" fill="#eee">Click SX</text>
+      <rect x="135" y="0" width="130" height="44" rx="8" fill="#2a4a6a" stroke="#4a7a9a"/>
+      <text x="200" y="28" text-anchor="middle" font-size="14" fill="#eee">Click DX</text>
+      <rect x="270" y="0" width="130" height="44" rx="8" fill="#22232a" stroke="#33343d"/>
+      <text x="335" y="28" text-anchor="middle" font-size="14" fill="#eee">🔒 Blocca</text>
+    </g>
+
+    <!-- Modificatori con Ctrl attivo -->
+    <g transform="translate(6,338)">
+      <rect x="0" y="0" width="97" height="44" rx="8" fill="#3a6" stroke="#5d8"/>
+      <text x="48" y="28" text-anchor="middle" font-size="14" fill="#eee" font-weight="600">Ctrl</text>
+      <rect x="101" y="0" width="97" height="44" rx="8" fill="#22232a" stroke="#33343d"/>
+      <text x="149" y="28" text-anchor="middle" font-size="14" fill="#eee">Shift</text>
+      <rect x="202" y="0" width="97" height="44" rx="8" fill="#22232a" stroke="#33343d"/>
+      <text x="250" y="28" text-anchor="middle" font-size="14" fill="#eee">Alt</text>
+      <rect x="303" y="0" width="97" height="44" rx="8" fill="#22232a" stroke="#33343d"/>
+      <text x="351" y="28" text-anchor="middle" font-size="14" fill="#eee">⌘/Super</text>
+    </g>
+
+    <!-- Tasti -->
+    <g transform="translate(6,388)" font-size="14" fill="#eee">
+      <rect x="0"   y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="23.25" y="28" text-anchor="middle">Esc</text>
+      <rect x="50.5" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="73.75" y="28" text-anchor="middle">Tab</text>
+      <rect x="101" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="124.25" y="28" text-anchor="middle">↑</text>
+      <rect x="151.5" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="174.75" y="28" text-anchor="middle">↓</text>
+      <rect x="202" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="225.25" y="28" text-anchor="middle">←</text>
+      <rect x="252.5" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="275.75" y="28" text-anchor="middle">→</text>
+      <rect x="303" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="326.25" y="28" text-anchor="middle">⌫</text>
+      <rect x="353.5" y="0" width="46.5" height="44" rx="8" fill="#22232a" stroke="#33343d"/><text x="376.75" y="28" text-anchor="middle">⏎</text>
+    </g>
+
+    <!-- Settings open -->
+    <g transform="translate(6,438)">
+      <rect x="0" y="0" width="400" height="170" rx="8" fill="#16161a" stroke="#2a2a30"/>
+      <text x="14" y="22" font-size="13" fill="#eee">⚙ Impostazioni</text>
+
+      <!-- Sensibilità -->
+      <text x="14" y="56" font-size="13" fill="#bbb">Sensibilità</text>
+      <line x1="120" y1="56" x2="350" y2="56" stroke="#444" stroke-width="3" stroke-linecap="round"/>
+      <line x1="120" y1="56" x2="240" y2="56" stroke="#5d8" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="240" cy="56" r="8" fill="#5d8"/>
+      <text x="376" y="60" text-anchor="end" font-size="13" fill="#888">1.6</text>
+
+      <!-- Scroll -->
+      <text x="14" y="96" font-size="13" fill="#bbb">Scroll</text>
+      <line x1="120" y1="96" x2="350" y2="96" stroke="#444" stroke-width="3" stroke-linecap="round"/>
+      <line x1="120" y1="96" x2="166" y2="96" stroke="#5d8" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="166" cy="96" r="8" fill="#5d8"/>
+      <text x="376" y="100" text-anchor="end" font-size="13" fill="#888">2</text>
+
+      <!-- Vibrazione -->
+      <text x="14" y="136" font-size="13" fill="#bbb">Vibrazione</text>
+      <rect x="120" y="124" width="20" height="20" rx="3" fill="#16161a" stroke="#5d8" stroke-width="2"/>
+      <path d="M 124 134 L 130 140 L 138 130" fill="none" stroke="#5d8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <rect x="0.5" y="0.5" width="411" height="914" rx="40" ry="40" fill="none" stroke="#222"/>
+</svg>

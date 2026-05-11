@@ -1,0 +1,34 @@
+sequenceDiagram
+  autonumber
+  actor U as Utente
+  participant B as Browser PWA
+  participant S as server.js
+  participant Y as ydotoold
+  participant K as Kernel /<br/>App attiva
+
+  Note over U,K: Caso A — Click sinistro (tap singolo)
+  U->>B: tap (touchstart + touchend < 200ms)
+  B->>B: avvia timer 180ms (PENDING_TAP_MS)
+  B->>S: WS {type:"click", button:"left"} (dopo 180ms)
+  S->>Y: ydotool click 0xC0
+  Y->>K: emit BTN_LEFT press+release
+  K-->>U: feedback visivo nell'app
+
+  Note over U,K: Caso B — Drag (doppio-tap-tieni)
+  U->>B: tap (touchstart + touchend)
+  B->>B: avvia timer 180ms
+  U->>B: nuovo touchstart entro 180ms
+  B->>B: cancella timer (no click!)
+  B->>S: WS {type:"mousedown", button:"left"}
+  S->>Y: ydotool click 0x80
+  Y->>K: BTN_LEFT press (tenuto)
+  loop muovi
+    U->>B: touchmove
+    B->>S: WS {type:"move", dx, dy}
+    S->>Y: ydotool mousemove -- dx dy
+    Y->>K: REL_X, REL_Y
+  end
+  U->>B: touchend
+  B->>S: WS {type:"mouseup", button:"left"}
+  S->>Y: ydotool click 0x40
+  Y->>K: BTN_LEFT release
